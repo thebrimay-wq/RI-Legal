@@ -340,8 +340,11 @@ a { color: inherit; }
   border-top: 2px solid var(--ink);
   margin-top: clamp(3rem, 6vw, 4.5rem);
 }
-.fact { padding: var(--space-6) var(--space-5) 0 0; border-right: 1px solid var(--rule); }
-.fact:last-child { border-right: 0; }
+/* Padding on both sides of the divider, or the next column's text sits flush
+   against the rule. */
+.fact { padding: var(--space-6) var(--space-6) 0; border-right: 1px solid var(--rule); }
+.fact:first-child { padding-left: 0; }
+.fact:last-child { border-right: 0; padding-right: 0; }
 .fact__value {
   font-size: var(--text-2xl); font-weight: 700; letter-spacing: -0.04em;
   line-height: 1; margin: 0 0 var(--space-3); font-variant-numeric: tabular-nums;
@@ -727,6 +730,8 @@ a { color: inherit; }
   .plate--2 { transform: translate(3px, 21px) rotate(-0.6deg); }
   .about__body { columns: 1; }
   .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fact:nth-child(odd) { padding-left: 0; }
+  .fact:nth-child(even) { padding-right: 0; }
   .fact:nth-child(2) { border-right: 0; }
   .fact:nth-child(3), .fact:nth-child(4) { border-top: 1px solid var(--rule); margin-top: var(--space-6); padding-top: var(--space-6); }
   /* The desktop index pins these to row 1. Release the row here or the title
@@ -764,6 +769,7 @@ a { color: inherit; }
   .form__row { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .facts { grid-template-columns: minmax(0, 1fr); }
   .fact { border-right: 0; border-top: 1px solid var(--rule); padding: var(--space-5) 0 0; margin-top: var(--space-5); }
+  .fact:nth-child(n) { padding-inline: 0; }
   .fact:first-child { border-top: 0; margin-top: 0; padding-top: var(--space-6); }
   .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); }
   .site-footer__grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-8); }
