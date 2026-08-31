@@ -355,38 +355,30 @@ a { color: inherit; }
 .frame__inner { position: absolute; inset: -9% 0; will-change: transform; }
 .frame__inner img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.78) contrast(1.02); }
 .about .frame { margin-top: var(--space-8); }
-/* A pile of prints. Three plates offset down the y axis, the top one square to
-   the grid and the two beneath it turned a degree or two, the way a stack sits. */
+/* A pile of sheets. The intake form is the top sheet; the photographs sit
+   directly behind it, pushed down the y axis so their edges show. */
 #contact { position: relative; overflow: hidden; }
 
 .contact__stack {
   position: relative;
-  grid-column: 7 / -1;
-  grid-row: 2;
-  width: min(100%, 400px);
-  /* Tucks up under the sheet's lower-right corner. */
-  margin: clamp(-8rem, -10vw, -4.5rem) 0 0 auto;
-  padding-bottom: 76px;          /* room for the plates showing beneath */
-  z-index: -1;
+  grid-column: 6 / -1;
+  grid-row: 1;
+  margin-bottom: 72px;      /* room for the sheets showing beneath */
 }
 
 .plate {
-  display: block;
-  aspect-ratio: 3 / 4;
+  position: absolute;
+  inset: 0;
   overflow: hidden;
   background: var(--paper-deep);
   border: 10px solid var(--paper-alt);
   box-shadow: 0 1px 0 rgba(17, 17, 16, 0.10),
-              0 20px 40px -26px rgba(17, 17, 16, 0.55);
+              0 20px 40px -26px rgba(17, 17, 16, 0.5);
 }
 .plate img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.72) contrast(1.04); }
 
-/* The lower two sit behind and below; the top one is in flow and sets the height. */
-.plate--3, .plate--2 { position: absolute; inset: 0; }
-.plate--3 { transform: translate(-16px, 60px) rotate(2deg); }
-.plate--2 { transform: translate(9px, 30px) rotate(-1.4deg); }
-.plate--1 { position: relative; }
-
+.plate--3 { transform: translate(-16px, 56px) rotate(1.6deg); }
+.plate--2 { transform: translate(9px, 28px) rotate(-1.1deg); }
 
 /* ---- Practice as a numbered editorial index ---- */
 
@@ -514,7 +506,7 @@ a { color: inherit; }
   align-items: start;
 }
 .contact__inner > div:first-child { grid-column: 1 / span 5; grid-row: 1; }
-.contact__inner .form            { grid-column: 6 / -1; grid-row: 1; }
+.contact__inner .form            { position: relative; z-index: 1; }
 
 .contact__details { margin: var(--space-8) 0 0; border-top: 2px solid var(--ink); }
 .contact__details > div {
@@ -724,17 +716,15 @@ a { color: inherit; }
   .hero__copy, .about, .contact__inner { grid-template-columns: minmax(0, 1fr); }
   .hero__lede, .hero__actions, .hero__note { grid-column: 1 / -1; }
   .about > div:first-child, .about__body,
-  .contact__inner > div:first-child, .contact__inner .form { grid-column: 1 / -1; }
+  .contact__inner > div:first-child, .contact__stack { grid-column: 1 / -1; }
 
   /* Single column, so pin the rows: details, sheet, then the stack beneath. */
   .contact__inner > div:first-child { grid-row: 1; }
-  .contact__inner .form { grid-row: 2; margin: 0; }
-  .contact__stack {
-    grid-column: 1 / -1;
-    grid-row: 3;
-    width: min(74%, 320px);
-    margin: clamp(-6rem, -12vw, -3rem) 0 0 auto;
-  }
+  .contact__stack { grid-column: 1 / -1; grid-row: 2; margin-bottom: 60px; }
+  /* Rotation alone throws the corners ~13px wide on a tall sheet, so both the
+     angle and the shift come down here to keep the pile inside the viewport. */
+  .plate--3 { transform: translate(-4px, 42px) rotate(0.9deg); }
+  .plate--2 { transform: translate(3px, 21px) rotate(-0.6deg); }
   .about__body { columns: 1; }
   .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .fact:nth-child(2) { border-right: 0; }
