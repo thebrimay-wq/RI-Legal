@@ -362,12 +362,13 @@ a { color: inherit; }
 .contact__plate {
   display: flex;
   flex-direction: column;
-  position: absolute;
-  top: 0;
-  right: var(--gutter);
-  width: min(42%, 440px);
-  margin: 0;
-  z-index: 0;
+  position: relative;
+  grid-column: 7 / -1;
+  grid-row: 2;
+  width: min(100%, 400px);
+  /* Tucks up under the sheet's lower-right corner. */
+  margin: clamp(-8rem, -10vw, -4.5rem) 0 0 auto;
+  z-index: -1;
 }
 
 /* The sheet under the print, offset so only its edge shows. */
@@ -400,10 +401,9 @@ a { color: inherit; }
 
 .contact__plate figcaption {
   position: relative;
-  order: -1;
-  margin: 0 0 var(--space-3);
-  padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--rule);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--rule);
   text-align: right;
   font-size: var(--text-xs);
   letter-spacing: 0.12em;
@@ -536,8 +536,8 @@ a { color: inherit; }
   row-gap: clamp(2.5rem, 5vw, 4rem);
   align-items: start;
 }
-.contact__inner > div:first-child { grid-column: 1 / span 5; }
-.contact__inner .form            { grid-column: 6 / -1; margin-top: clamp(6rem, 13vw, 12rem); margin-right: clamp(1rem, 7vw, 6rem); }
+.contact__inner > div:first-child { grid-column: 1 / span 5; grid-row: 1; }
+.contact__inner .form            { grid-column: 6 / -1; grid-row: 1; }
 
 .contact__details { margin: var(--space-8) 0 0; border-top: 2px solid var(--ink); }
 .contact__details > div {
@@ -749,18 +749,14 @@ a { color: inherit; }
   .about > div:first-child, .about__body,
   .contact__inner > div:first-child, .contact__inner .form { grid-column: 1 / -1; }
 
-  /* The print sits in flow; the sheet still lands across its lower-left. */
+  /* Single column, so pin the rows: details, sheet, then the stack beneath. */
+  .contact__inner > div:first-child { grid-row: 1; }
+  .contact__inner .form { grid-row: 2; margin: 0; }
   .contact__plate {
-    position: relative;
     grid-column: 1 / -1;
-    top: auto;
-    right: auto;
-    width: min(72%, 380px);
-    margin: var(--space-8) 0 0 auto;
-  }
-  .contact__inner .form {
-    margin-top: clamp(-7rem, -14vw, -4rem);
-    margin-right: 0;
+    grid-row: 3;
+    width: min(74%, 340px);
+    margin: clamp(-6rem, -12vw, -3rem) 0 0 auto;
   }
   .about__body { columns: 1; }
   .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
