@@ -19,3 +19,8 @@ npm-debug.log*
 
 # Agent workspaces
 .superpowers/
+
+# Source media, kept locally. The web-ready derivatives (hero-*.mp4,
+# *.webp, hero-poster.jpg) are committed instead.
+assets/*_medium.mp4
+assets/*_1920.jpg

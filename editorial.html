@@ -9,22 +9,19 @@
 <meta property="og:title" content="RI Legal Group — California Real Estate and Estate Law">
 <meta property="og:description" content="From the purchase agreement to the living trust. Residential and commercial real estate, leasing, land use, estate planning, and probate.">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#0C0C0E">
+<meta name="theme-color" content="#F2F0EA">
 
 <link rel="icon" href="assets/favicon.png" sizes="any">
 <link rel="apple-touch-icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap">
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="css/editorial.css">
 </head>
-<body>
+<body data-magnetic="off">
 
 <a class="skip-link" href="#main">Skip to main content</a>
 
-<!-- Stationary rule system and film grain. Both are decoration only. -->
-<div class="rails" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
-<div class="grain" aria-hidden="true"></div>
 
 <header class="site-header" id="top">
   <div class="container site-header__inner">
@@ -61,19 +58,6 @@
 
   <!-- ============================ Hero ============================ -->
   <section class="hero">
-    <div class="hero__media" aria-hidden="true">
-      <video class="hero__video is-active" data-hero-video playsinline muted
-             preload="auto" poster="assets/hero-poster.jpg">
-        <source src="assets/hero-1.mp4" type="video/mp4">
-      </video>
-      <video class="hero__video" data-hero-video playsinline muted
-             preload="none" data-src="assets/hero-2.mp4"></video>
-      <video class="hero__video" data-hero-video playsinline muted
-             preload="none" data-src="assets/hero-3.mp4"></video>
-      <div class="hero__scrim"></div>
-      <div class="hero__scan" aria-hidden="true"></div>
-    </div>
-
     <div class="container hero__inner">
       <div class="hero__copy">
         <p class="eyebrow" data-reveal>California &middot; Real Estate &amp; Estate Law</p>
@@ -90,9 +74,23 @@
         <p class="hero__note" data-reveal>Consultations are confidential and cost nothing.</p>
       </div>
 
+      <div class="hero__media" data-parallax="off" aria-hidden="true">
+        <span class="frame__inner">
+          <video class="hero__video is-active" data-hero-video playsinline muted
+                 preload="auto" poster="assets/hero-poster.jpg">
+            <source src="assets/hero-1.mp4" type="video/mp4">
+          </video>
+          <video class="hero__video" data-hero-video playsinline muted
+                 preload="none" data-src="assets/hero-2.mp4"></video>
+          <video class="hero__video" data-hero-video playsinline muted
+                 preload="none" data-src="assets/hero-3.mp4"></video>
+        </span>
+        <div class="hero__scrim"></div>
+        </div>
+
       <div class="hero__meta" aria-hidden="true">
-        <p class="hero__coords">33.9192&deg; N<br>118.4165&deg; W</p>
-        <p class="hero__scroll"><i></i> Scroll</p>
+        <p class="hero__coords">El Segundo, California &middot; 33.9192&deg; N 118.4165&deg; W</p>
+        <p class="hero__scroll">Scroll <i></i></p>
       </div>
     </div>
   </section>
@@ -323,6 +321,11 @@
           <figcaption>Property held in trust</figcaption>
         </figure>
       </div>
+
+      <figure class="pullquote" data-reveal>
+        <p>Property work and estate work land on the same desk for a reason.</p>
+        <cite>RI Legal Group</cite>
+      </figure>
     </div>
   </section>
 
@@ -525,17 +528,17 @@
 
 <!-- TEMPORARY: side-by-side style comparison. Delete this block before launch. -->
 <div class="style-switch" aria-label="Style preview">
-  <a href="index.html" aria-current="page">Dark</a><a href="editorial.html">Editorial</a>
+  <a href="index.html">Dark</a><a href="editorial.html" aria-current="page">Editorial</a>
 </div>
 <style>
   .style-switch{position:fixed;left:16px;bottom:16px;z-index:900;display:flex;
     font:600 11px/1 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;
-    border:1px solid #EDEAE4;background:#0C0C0E;color:#EDEAE4}
+    border:1px solid currentColor;background:#fff;color:#111110}
   .style-switch a{padding:9px 14px;text-decoration:none;color:inherit}
-  .style-switch a+a{border-left:1px solid #EDEAE4}
+  .style-switch a+a{border-left:1px solid currentColor}
   @media(max-width:700px){.style-switch{left:10px;bottom:10px;font-size:10px;opacity:.85}
     .style-switch a{padding:7px 10px}}
-  .style-switch a[aria-current]{background:#EDEAE4;color:#0C0C0E}
+  .style-switch a[aria-current]{background:#111110;color:#fff}
 </style>
 
 <script src="js/main.js" defer></script>
