@@ -355,26 +355,60 @@ a { color: inherit; }
 .frame__inner { position: absolute; inset: -9% 0; will-change: transform; }
 .frame__inner img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.78) contrast(1.02); }
 .about .frame { margin-top: var(--space-8); }
-/* The photograph runs full-height behind the right column; the intake sheet
-   sits on top of it. */
+/* An editorial stack: a print laid on the desk with a second sheet showing
+   beneath it, and the intake form landing across its lower-left corner. */
 #contact { position: relative; overflow: hidden; }
 
 .contact__plate {
+  display: flex;
+  flex-direction: column;
   position: absolute;
-  inset: 0 0 0 40%;
+  top: 0;
+  right: var(--gutter);
+  width: min(42%, 440px);
   margin: 0;
-  overflow: hidden;
   z-index: 0;
 }
-.contact__plate .frame__inner { position: absolute; inset: -9% 0; will-change: transform; }
-.contact__plate img {
-  width: 100%; height: 100%; object-fit: cover;
-  filter: saturate(0.72) contrast(1.04) brightness(0.94);
+
+/* The sheet under the print, offset so only its edge shows. */
+.contact__plate-shadow {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: calc(100% - 2.4rem);
+  transform: translate(22px, 22px);
+  background: var(--paper-alt);
+  border: 1px solid var(--rule);
+  box-shadow: 0 14px 30px -22px rgba(17, 17, 16, 0.4);
 }
-.contact__plate::after {
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(90deg, var(--paper-deep) 0%, rgba(232, 229, 221, 0.35) 26%, transparent 60%);
+
+/* The print, with a photographic margin. */
+.contact__plate-img {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--paper-deep);
+  border: 10px solid var(--paper-alt);
+  box-shadow: 0 1px 0 rgba(17, 17, 16, 0.08),
+              0 26px 50px -30px rgba(17, 17, 16, 0.55);
+}
+.contact__plate-img .frame__inner { position: absolute; inset: -9% 0; will-change: transform; }
+.contact__plate-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(0.72) contrast(1.04);
+}
+
+.contact__plate figcaption {
+  position: relative;
+  order: -1;
+  margin: 0 0 var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--rule);
+  text-align: right;
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
 }
 
 /* ---- Practice as a numbered editorial index ---- */
@@ -503,7 +537,7 @@ a { color: inherit; }
   align-items: start;
 }
 .contact__inner > div:first-child { grid-column: 1 / span 5; }
-.contact__inner .form            { grid-column: 7 / -1; }
+.contact__inner .form            { grid-column: 6 / -1; margin-top: clamp(6rem, 13vw, 12rem); margin-right: clamp(1rem, 7vw, 6rem); }
 
 .contact__details { margin: var(--space-8) 0 0; border-top: 2px solid var(--ink); }
 .contact__details > div {
@@ -708,21 +742,26 @@ a { color: inherit; }
    ========================================================================== */
 
 @media (max-width: 1024px) {
+  /* A 12-track grid with gutter-sized gaps leaves almost nothing for the
+     tracks at this width, so collapse to one column rather than span twelve. */
+  .hero__copy, .about, .contact__inner { grid-template-columns: minmax(0, 1fr); }
   .hero__lede, .hero__actions, .hero__note { grid-column: 1 / -1; }
   .about > div:first-child, .about__body,
-  .contact__inner > div:first-child, .contact__inner .form,
-  .contact__plate { grid-column: 1 / -1; }
-  /* Photograph becomes a band, sheet overlaps its lower edge. */
+  .contact__inner > div:first-child, .contact__inner .form { grid-column: 1 / -1; }
+
+  /* The print sits in flow; the sheet still lands across its lower-left. */
   .contact__plate {
     position: relative;
-    inset: auto;
-    aspect-ratio: 16 / 9;
-    margin-top: var(--space-8);
+    grid-column: 1 / -1;
+    top: auto;
+    right: auto;
+    width: min(72%, 380px);
+    margin: var(--space-8) 0 0 auto;
   }
-  .contact__plate::after {
-    background: linear-gradient(180deg, transparent 55%, rgba(232, 229, 221, 0.45));
+  .contact__inner .form {
+    margin-top: clamp(-7rem, -14vw, -4rem);
+    margin-right: 0;
   }
-  .contact__inner .form { margin-top: clamp(-5rem, -8vw, -3rem); }
   .about__body { columns: 1; }
   .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .fact:nth-child(2) { border-right: 0; }
