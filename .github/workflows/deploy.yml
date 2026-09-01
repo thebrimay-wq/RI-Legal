@@ -29,3 +29,6 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # The action defaults to wrangler 3.x, which predates wrangler.jsonc
+          # support and fails with "Missing entry-point". Keep this on 4.x.
+          wranglerVersion: "4.127.1"
