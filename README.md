@@ -139,6 +139,33 @@ That lands around 2 MB for a 12 second clip. Regenerate the poster from the lead
 ffmpeg -ss 1.5 -i assets/hero-1.mp4 -frames:v 1 -vf "scale=1600:-2" -q:v 6 assets/hero-poster.jpg
 ```
 
+## Link preview
+
+`assets/og-image.png` is the card shown when the URL is shared in Messages,
+WhatsApp, Slack, and similar. White wordmark centred on the site's ink black,
+1200x630, no text.
+
+The logo is set to 46% of the width on purpose. Some clients crop the card to a
+square, and at that size it still clears the crop with a 39px margin either side.
+
+Regenerate it after a logo change:
+
+```bash
+python3 -c "
+from PIL import Image
+logo = Image.open('assets/RI legal logo white.png').convert('RGBA')
+logo = logo.crop(logo.getbbox())
+w = round(1200 * 0.46); h = round(logo.height * w / logo.width)
+logo = logo.resize((w, h), Image.LANCZOS)
+card = Image.new('RGB', (1200, 630), (17, 17, 16))
+card.paste(logo, ((1200 - w) // 2, (630 - h) // 2), logo)
+card.save('assets/og-image.png', 'PNG', optimize=True)
+"
+```
+
+The `og:image` URL in `index.html` is absolute. Scrapers do not resolve relative
+paths, so a relative one shows no image at all.
+
 ## Photography
 
 Six photographs, cropped and encoded to WebP, 395 KB total:
