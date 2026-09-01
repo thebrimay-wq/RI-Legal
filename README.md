@@ -244,19 +244,23 @@ a `matter` allowlist, length caps, and HTML escaping of anything a visitor typed
 
 ## Deploy
 
-Live at **https://rilegalgroup.com**, served by a Cloudflare Worker
+Live at **https://www.rilegalgroup.com**, served by a Cloudflare Worker
 (`ri-legal-group`) that also handles the intake endpoint.
+
+GitHub Pages previously published a second copy of this site; it was disabled so
+the two would stop competing as duplicate content. `index.html` carries a
+canonical pointing at the www host.
 
 Pushing to `main` deploys automatically via `.github/workflows/deploy.yml`. The
 workflow checks `worker/index.js` parses, then runs `wrangler deploy`. It needs one
 GitHub repository secret:
 
-| Secret | Where to get it |
+| Secret | Notes |
 | --- | --- |
-| `CLOUDFLARE_API_TOKEN` | Cloudflare → My Profile → API Tokens → Create Token → **Edit Cloudflare Workers** template |
+| `CLOUDFLARE_API_TOKEN` | Configured. Made from the **Edit Cloudflare Workers** template, scoped to this account and the `rilegalgroup.com` zone only |
 
-Add it under Settings → Secrets and variables → Actions. Without it the workflow
-fails on every push; nothing else breaks.
+To replace it: Cloudflare → My Profile → API Tokens, then Settings → Secrets and
+variables → Actions on the repo. The token cannot read DNS or touch mail.
 
 To deploy by hand: `npx wrangler deploy`.
 
