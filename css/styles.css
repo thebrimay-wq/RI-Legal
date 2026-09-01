@@ -623,6 +623,15 @@ a { color: inherit; }
 
 .form .btn { width: 100%; margin-top: var(--space-2); }
 
+/* Honeypot. Off-screen rather than display:none, which some bots skip. */
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .form__status {
   display: none; align-items: flex-start; gap: var(--space-3);
   padding: var(--space-4); margin-bottom: var(--space-6);

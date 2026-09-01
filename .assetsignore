@@ -1,0 +1,15 @@
+# Not part of the site
+worker
+wrangler.jsonc
+.assetsignore
+.gitignore
+README.md
+node_modules
+.git
+.wrangler
+.DS_Store
+
+# Source media, kept locally only. The web-ready derivatives ship instead.
+# One of these is 25 MB, which is Cloudflare's per-file asset limit.
+assets/*_medium.mp4
+assets/*_1920.jpg

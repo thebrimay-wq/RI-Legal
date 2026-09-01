@@ -169,9 +169,10 @@ Use `(900, 1125)` for the about frame and `(900, 1200)` for the contact plate.
 
 ## Before this goes live
 
-- [ ] **The form does not send anything.** It fakes a submit and shows a success
-      message. Point it at Formspree, Netlify Forms, or your own endpoint; the block
-      to replace is marked in `js/main.js`
+- [ ] **Finish the form.** The endpoint is built and deployed, but email will not
+      send until `rilegalgroup.com` is on Cloudflare DNS and onboarded to Email
+      Sending. Until then the form shows an honest error with the phone number and
+      email rather than claiming it was received. See **The intake form** below
 - [ ] The four fact tiles in `#about`. `2` practices is safe. Confirm `Statewide`
       California coverage, the `48 hrs` response time, and the `Flat fee` promise
 - [ ] The free-consultation claim in the hero note
@@ -186,12 +187,48 @@ Use `(900, 1125)` for the about frame and `(900, 1200)` for the contact plate.
 Have the firm review every claim on this page against California Rule of
 Professional Conduct 7.1 and the State Bar advertising standards before publishing.
 
+## The intake form
+
+`POST /api/intake` is handled by `worker/index.js`, a Cloudflare Worker that also
+serves the static site. It emails the request to the firm using the Cloudflare
+Email Service `send_email` binding, so there are no API keys anywhere.
+
+The recipient is hard-coded in the Worker rather than read from the request. That
+keeps it from becoming an open relay, and because the address is a verified
+destination on the Cloudflare account, sending to it is free on all plans and does
+not count against any quota.
+
+`replyTo` is set to the enquirer's address, so replying in the mail client goes
+straight back to them.
+
+Protections: a `company` honeypot field (present and filled means a bot; a request
+that omits the field entirely is still accepted, because silently binning a real
+enquiry is worse than accepting a rare bot), server-side validation of every field,
+a `matter` allowlist, length caps, and HTML escaping of anything a visitor typed.
+
+**Still required before email works:**
+
+1. Add `rilegalgroup.com` to the Cloudflare account and move its nameservers from
+   Google. The MX, SPF, DKIM, and DMARC records for Google Workspace must come
+   across first, or firm email stops
+2. Onboard the domain: `npx wrangler email sending enable rilegalgroup.com`
+3. Verify `russel@rilegalgroup.com` as a destination address
+4. Re-run the end-to-end test; the Worker returns 502 `send_failed` until then
+
 ## Deploy
 
-Live at **https://thebrimay-wq.github.io/RI-Legal/** via GitHub Pages, from `main`
-at the repo root. Push to `main` and Pages rebuilds in a minute or two.
+Two places currently serve this site:
 
-Netlify, Cloudflare Pages, and Vercel all work the same way. Nothing to build.
+| Where | URL | Notes |
+| --- | --- | --- |
+| Cloudflare Worker | https://ri-legal-group.thebrimay.workers.dev | `npx wrangler deploy`. Serves the site and the form endpoint |
+| GitHub Pages | https://thebrimay-wq.github.io/RI-Legal/ | Push to `main`. Static only, so the form shows its error state |
+
+Retire the GitHub Pages copy once the domain points at Cloudflare. `.nojekyll` is
+there because Jekyll was failing the Pages build.
+
+`.assetsignore` keeps the Worker from uploading the local source media, one file of
+which is 25 MB, exactly Cloudflare's per-file asset limit.
 
 ## Accessibility
 

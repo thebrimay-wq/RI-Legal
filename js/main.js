@@ -398,27 +398,40 @@
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span class="btn__spinner" aria-hidden="true"></span> Sending';
 
-    /* ------------------------------------------------------------------
-       Replace this block with a real endpoint. Formspree, Netlify Forms,
-       and a plain POST to your own handler all drop straight in:
-
-         fetch('https://formspree.io/f/XXXXXXX', {
-           method: 'POST',
-           headers: { Accept: 'application/json' },
-           body: new FormData(form)
-         }).then(...)
-       ------------------------------------------------------------------ */
-    window.setTimeout(function () {
+    var restore = function () {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Request a consultation';
-      form.reset();
-      fields.forEach(function (el) {
-        var wrapper = wrapperOf(el);
-        if (wrapper) wrapper.removeAttribute('data-invalid');
-        el.removeAttribute('aria-invalid');
+    };
+
+    fetch('/api/intake', {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+      body: new FormData(form)
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('http ' + res.status);
+        return res.json();
+      })
+      .then(function () {
+        restore();
+        form.reset();
+        fields.forEach(function (el) {
+          var wrapper = wrapperOf(el);
+          if (wrapper) wrapper.removeAttribute('data-invalid');
+          el.removeAttribute('aria-invalid');
+        });
+        showStatus('success', 'Request sent. We reply within one business day.');
+        if (status) status.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+      })
+      .catch(function () {
+        /* Never claim it was received when it was not. Hand over the direct
+           routes instead, so the enquiry is not simply lost. */
+        restore();
+        showStatus(
+          'error',
+          'That did not send. Please call (424) 512-4414 or email russel@rilegalgroup.com and we will pick it up from there.'
+        );
+        if (status) status.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
       });
-      showStatus('success', 'Message received. We reply within one business day.');
-      if (status) status.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
-    }, 900);
   });
 })();

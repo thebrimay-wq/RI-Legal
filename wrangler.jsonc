@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ri-legal-group",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-08-01",
+
+  // The static site. The Worker runs first and falls through to these.
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS"
+  },
+
+  // Sending is restricted to one from-address so a mistake cannot send as
+  // anything else on the domain. The `to` is pinned in worker/index.js.
+  "send_email": [
+    {
+      "name": "EMAIL",
+      "allowed_sender_addresses": ["intake@rilegalgroup.com"]
+    }
+  ],
+
+  "observability": { "enabled": true }
+}
