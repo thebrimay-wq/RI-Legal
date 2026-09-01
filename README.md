@@ -78,10 +78,15 @@ All scroll motion runs through one listener and one animation frame in
 | Effect | How |
 | --- | --- |
 | Heading reveal | Every word of a `[data-split]` heading is wrapped in a mask and slides up, staggered 55ms. The walker recurses into child elements, so the italic `<em>` survives the split |
-| Block reveal | `[data-reveal]` fades and lifts 20px, siblings staggered 90ms via a `--d` property |
+| Block reveal | `[data-reveal]` fades and lifts 16px over 420ms, siblings staggered 32ms via a `--d` property and capped at six |
 | Image parallax | Each `.frame__inner` is 118% of its frame and drifts ±7% across its transit of the viewport. The hero film and the contact plate use the same mechanism |
 | Progress | A vermillion hairline along the bottom of the masthead, scaled to scroll position |
 | Nav hover | The label slides up and a duplicate rises into its place, drawn from `data-text` |
+
+Reveals fire on a positive bottom `rootMargin`, so a section starts animating
+just before it scrolls into view rather than after. Group staggers are keyed by a
+`Map` of parent nodes: a DOM node used as a plain object key stringifies to
+`"[object HTMLDivElement]"`, which silently merges every group into one counter.
 
 Word masks carry `padding: 0 0.05em 0.22em` with a matching negative margin, which
 keeps descenders and glyph side bearings inside the mask without changing layout.

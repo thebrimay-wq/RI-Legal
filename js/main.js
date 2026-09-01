@@ -89,7 +89,8 @@
     splitTargets.forEach(function (el) {
       splitWords(el);
       Array.prototype.forEach.call(el.querySelectorAll('.w__i'), function (inner, i) {
-        inner.style.setProperty('--d', (i * 55) + 'ms');
+        /* Capped: without it a long heading staggers for most of a second. */
+        inner.style.setProperty('--d', (Math.min(i, 8) * 26) + 'ms');
       });
     });
   }
@@ -103,14 +104,19 @@
   if (reduceMotion || !('IntersectionObserver' in window)) {
     revealables.forEach(function (el) { el.classList.add('is-visible'); });
   } else {
-    /* Siblings inside one group come in one after another rather than together. */
-    var groups = {};
+    /* Siblings inside one group come in one after another rather than together.
+       Keyed by a Map, not a plain object: a DOM node used as an object key
+       stringifies to "[object HTMLDivElement]", which collapsed every group
+       into one running counter and gave elements far down the page over a
+       second of delay each. */
+    var groups = new Map();
     revealables.forEach(function (el) {
-      var parent = el.parentNode;
       if (!el.hasAttribute('data-reveal')) return;
-      var key = groups[parent] || (groups[parent] = []);
-      key.push(el);
-      el.style.setProperty('--d', ((key.length - 1) * 90) + 'ms');
+      var parent = el.parentNode;
+      var group = groups.get(parent);
+      if (!group) { group = []; groups.set(parent, group); }
+      group.push(el);
+      el.style.setProperty('--d', (Math.min(group.length - 1, 5) * 32) + 'ms');
     });
 
     var revealObserver = new IntersectionObserver(function (entries) {
@@ -119,7 +125,9 @@
         entry.target.classList.add('is-visible');
         revealObserver.unobserve(entry.target);
       });
-    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+      /* Positive bottom margin extends the root downward, so a section begins
+         revealing just before it scrolls into view rather than after. */
+    }, { rootMargin: '0px 0px 15% 0px', threshold: 0 });
 
     revealables.forEach(function (el) { revealObserver.observe(el); });
   }
