@@ -217,18 +217,38 @@ a `matter` allowlist, length caps, and HTML escaping of anything a visitor typed
 
 ## Deploy
 
-Two places currently serve this site:
+Live at **https://rilegalgroup.com**, served by a Cloudflare Worker
+(`ri-legal-group`) that also handles the intake endpoint.
 
-| Where | URL | Notes |
-| --- | --- | --- |
-| Cloudflare Worker | https://ri-legal-group.thebrimay.workers.dev | `npx wrangler deploy`. Serves the site and the form endpoint |
-| GitHub Pages | https://thebrimay-wq.github.io/RI-Legal/ | Push to `main`. Static only, so the form shows its error state |
+Pushing to `main` deploys automatically via `.github/workflows/deploy.yml`. The
+workflow checks `worker/index.js` parses, then runs `wrangler deploy`. It needs one
+GitHub repository secret:
 
-Retire the GitHub Pages copy once the domain points at Cloudflare. `.nojekyll` is
-there because Jekyll was failing the Pages build.
+| Secret | Where to get it |
+| --- | --- |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare → My Profile → API Tokens → Create Token → **Edit Cloudflare Workers** template |
 
-`.assetsignore` keeps the Worker from uploading the local source media, one file of
-which is 25 MB, exactly Cloudflare's per-file asset limit.
+Add it under Settings → Secrets and variables → Actions. Without it the workflow
+fails on every push; nothing else breaks.
+
+To deploy by hand: `npx wrangler deploy`.
+
+`.assetsignore` keeps the local source media out of the upload — one of those files
+is 25 MB, exactly Cloudflare's per-file asset limit.
+
+### DNS
+
+Nameservers are `kayleigh.ns.cloudflare.com` and `mitch.ns.cloudflare.com`, moved
+from Google/Squarespace. Google Workspace mail is unchanged: the five MX records,
+SPF, the DKIM key, and the Workspace verification CNAME were all carried across and
+verified byte for byte against the old nameservers before the switch.
+
+Apex and `www` are Worker custom domains, declared in `wrangler.jsonc`. Do not add
+A records for them by hand.
+
+The old Squarespace records (four A records, the `www` CNAME, the HTTPS record, and
+`_domainconnect`) were deliberately not carried over. They still exist in the
+Squarespace panel, unused — switching the nameservers back there is the rollback.
 
 ## Accessibility
 

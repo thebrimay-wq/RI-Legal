@@ -1,0 +1,31 @@
+name: Deploy to Cloudflare
+
+# Every push to main redeploys the Worker and the static assets.
+# Also runnable by hand from the Actions tab.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# One deploy at a time. A second push while the first is running waits
+# rather than racing it.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      # Catch a broken worker before it reaches production. The site is plain
+      # HTML and CSS, so this is the only thing worth compiling.
+      - name: Check worker syntax
+        run: node --check worker/index.js
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}

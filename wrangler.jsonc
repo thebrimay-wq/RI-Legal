@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "ri-legal-group",
+  "account_id": "3570800343e1a5c43e0f001f63f9638b",
   "main": "worker/index.js",
   "compatibility_date": "2026-08-01",
 
@@ -17,6 +18,12 @@
       "name": "EMAIL",
       "allowed_sender_addresses": ["intake@rilegalgroup.com"]
     }
+  ],
+
+  // Apex and www. These replace the Squarespace records that were removed.
+  "routes": [
+    { "pattern": "rilegalgroup.com", "custom_domain": true },
+    { "pattern": "www.rilegalgroup.com", "custom_domain": true }
   ],
 
   "observability": { "enabled": true }
